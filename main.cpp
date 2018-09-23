@@ -74,22 +74,24 @@ public:
     }
     void addBook(string author, string title, string genre)
     {
+
+        if(searchForBook(title,author,genre)!=NULL)
+        {
+            searchForBook(title,author,genre)->numberOfBooks++;
+            return;
+        }
+
         BookInventory * temp = new BookInventory;
         Book * tBook = new Book;
         tBook->author = author;
         tBook->genre = genre;
         tBook->title = title;
         temp ->book = tBook;
-        for (auto const &value: books)
-            if(searchForBook(title,author,genre)!=NULL)
-            {
-                value->numberOfBooks++;
-                return;
-            }
 
-            temp->ID = nextId;
-            nextId++;
-            temp->numberOfBooks++;
+
+        temp->ID = nextId;
+        nextId++;
+        temp->numberOfBooks++;
         books.push_back(temp);
     }
     void listBooks()
