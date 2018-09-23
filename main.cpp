@@ -249,8 +249,32 @@ int main()
 
     Library testLib;
     testLib.readFromFile();
-    testLib.listBooks();
-    testLib.deleteBook("GeorgeRRMartin", "GameOfThrones", "Fantasy");
+
+
+    cout << "Choose what you want to do: " << endl;
+    cout << "Enter 1 if you want to add a book" << endl;
+    cout << "2 if you are searching for book" << endl;
+    cout << "3 if you want to delete book" << endl;
+
+    char ch;
+    ch = getchar();
+
+
+    switch(ch)
+    {
+        case '1':
+            testLib.userAddBook();
+            break;
+        case '2':
+            testLib.userSearchForBook();
+            break;
+        case '3':
+            testLib.userDeleteBook();
+        default:
+            cout << "Please enter only 1,2 or 3";
+            break;
+    }
+
     testLib.saveToFile();
 
     return 0;
