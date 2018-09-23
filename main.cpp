@@ -125,18 +125,30 @@ public:
     void saveToFile()
     {
         ofstream outputFile;
+        ofstream idFile;
+        idFile.open("id.txt");
         outputFile.open("books.txt");
-        for (auto const &value: books)
+        if(idFile && outputFile)
         {
-            outputFile << value->book->title << " " << value->book->author << " "<< value->book->genre << " " << value->ID << " "<< value->numberOfBooks << endl;
+            for (auto const &value: books)
+            {
+                outputFile << value->book->title << " " << value->book->author << " "<< value->book->genre << " " << value->ID << " "<< value->numberOfBooks << endl;
+            }
+            idFile << nextId;
+            outputFile.close();
+            idFile.close();
         }
-        outputFile.close();
+        else
+            return;
     }
     void readFromFile()
     {
         ifstream saveFile;
+        ifstream idFile;
         saveFile.open("books.txt");
-        if(saveFile)
+        idFile.open("id.txt");
+        idFile >> nextId;
+        if(saveFile && idFile)
         {
             string author;
             string title;
@@ -147,6 +159,8 @@ public:
             {
                 books.push_back(new BookInventory(new Book(author, title, genre), quantity, id));
             }
+            saveFile.close();
+            idFile.close();
         }
         else
             return;
@@ -255,24 +269,33 @@ int main()
     cout << "Enter 1 if you want to add a book" << endl;
     cout << "2 if you are searching for book" << endl;
     cout << "3 if you want to delete book" << endl;
+    cout << "4 if you want to list all books" << endl;
+    cout << "5 if uou want to end the program" << endl;
 
     char ch;
-    ch = getchar();
-
-
-    switch(ch)
+    while(true)
     {
-        case '1':
-            testLib.userAddBook();
-            break;
-        case '2':
-            testLib.userSearchForBook();
-            break;
-        case '3':
-            testLib.userDeleteBook();
-        default:
-            cout << "Please enter only 1,2 or 3";
-            break;
+        ch = getchar();
+        switch(ch)
+        {
+            case '1':
+                testLib.userAddBook();
+                break;
+            case '2':
+                testLib.userSearchForBook();
+                break;
+            case '3':
+                testLib.userDeleteBook();
+                break;
+            case '4':
+                testLib.listBooks();
+                break;
+            case '5':
+                return 0;
+            default:
+                cout << "Please enter only 1,2,3 or 4";
+                break;
+        }
     }
 
     testLib.saveToFile();
