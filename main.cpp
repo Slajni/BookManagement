@@ -2,6 +2,7 @@
 #include <vector>
 #include <stdio.h>
 #include <fstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -129,6 +130,26 @@ public:
         else
             return;
     }
+
+    void deleteBook(string author, string title, string genre)
+    {
+        BookInventory *temp = searchForBook(title, author, genre);
+        if(temp!=NULL)
+        {
+            if(temp->numberOfBooks>1)
+                temp->numberOfBooks--;
+            else
+            {
+                books.erase(remove(books.begin(), books.end(), temp),books.end());
+            }
+        }
+        else
+            return;
+    }
+    void deleteBook(int id1)
+    {
+
+    }
 };
 
 int Library::nextId = 0;
@@ -139,7 +160,7 @@ int main()
     Library testLib;
     testLib.readFromFile();
     testLib.listBooks();
-    testLib.addBook("GeorgeRRMartin", "GameOfThrones", "Fantasy");
+    testLib.deleteBook("GeorgeRRMartin", "GameOfThrones", "Fantasy");
     testLib.saveToFile();
 
     return 0;
