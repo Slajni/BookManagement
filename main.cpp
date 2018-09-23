@@ -63,6 +63,15 @@ public:
 
         return NULL;
     }
+    BookInventory *searchForBook(int id)
+    {
+        for (auto const &value: books)
+        {
+            if(value->ID == id)
+                return value;
+        }
+        return NULL;
+    }
     void addBook(string author, string title, string genre)
     {
         BookInventory * temp = new BookInventory;
