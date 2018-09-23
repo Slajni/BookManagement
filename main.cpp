@@ -51,6 +51,18 @@ class Library
 
 public:
 
+    BookInventory *searchForBook(string title, string author, string genre)
+    {
+        for (auto const &value: books)
+        {
+            if(value->book->title == title && value->book->author == author && value->book->genre == genre)
+            {
+                return value;
+            }
+        }
+
+        return NULL;
+    }
     void addBook(string author, string title, string genre)
     {
         BookInventory * temp = new BookInventory;
@@ -60,7 +72,7 @@ public:
         tBook->title = title;
         temp ->book = tBook;
         for (auto const &value: books)
-            if(value->book->title == tBook->title && value->book->author == tBook->author && value->book->genre == tBook->genre)
+            if(searchForBook(title,author,genre)!=NULL)
             {
                 value->numberOfBooks++;
                 return;
@@ -116,6 +128,7 @@ int main()
     Library testLib;
     testLib.readFromFile();
     testLib.listBooks();
+    testLib.addBook("GeorgeRRMartin", "GameOfThrones", "Fantasy");
     testLib.saveToFile();
 
     return 0;
