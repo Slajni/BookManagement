@@ -27,8 +27,10 @@ struct Book
 
 };
 
-struct BookInventory
+class BookInventory
 {
+public:
+
     Book * book;
     int numberOfBooks = 0;
     int ID;
@@ -42,6 +44,12 @@ struct BookInventory
     BookInventory()
     {
 
+    }
+    void printInfo()
+    {
+
+        printf("Book: %s written by %s of genre %s has %d copies and has %d id number\n", book->title.c_str(),
+               book->author.c_str(), book->genre.c_str(), numberOfBooks,ID);
     }
 };
 
@@ -71,6 +79,19 @@ public:
             if(value->ID == id)
                 return value;
         }
+        return NULL;
+    }
+
+    BookInventory *searchForBook(Book * book)
+    {
+        for (auto const &value: books)
+        {
+            if(value->book->title == book->title && value->book->author == book->author && value->book->genre == book->genre)
+            {
+                return value;
+            }
+        }
+
         return NULL;
     }
     void addBook(string author, string title, string genre)
@@ -144,11 +165,80 @@ public:
             }
         }
         else
+        {
+            cout << "There is no such book" << endl;
             return;
+        }
     }
-    void deleteBook(int id1)
+    void deleteBook(int id)
     {
-
+        BookInventory *temp = searchForBook(id);
+        if(temp!=NULL)
+        {
+            if(temp->numberOfBooks>1)
+                temp->numberOfBooks--;
+            else
+            {
+                books.erase(remove(books.begin(), books.end(), temp),books.end());
+            }
+        }
+        else
+        {
+            cout << "There is no such book" << endl;
+            return;
+        }
+    }
+    void deleteBook(Book * book)
+    {
+        BookInventory *temp = searchForBook(book);
+        if(temp!=NULL)
+        {
+            if(temp->numberOfBooks>1)
+                temp->numberOfBooks--;
+            else
+            {
+                books.erase(remove(books.begin(), books.end(), temp),books.end());
+            }
+        }
+        else
+        {
+            cout << "There is no such book" << endl;
+            return;
+        }
+    }
+    Book * getBookInfo()
+    {
+        string author;
+        string title;
+        string genre;
+        cout << "If you want to add book please provide this information" << endl;
+        cout << "Author name without spaces: ";
+        cin >> author;
+        cout << "Title without spaces: ";
+        cin >> title;
+        cout << "Genre without spaces: ";
+        cin >> genre;
+        return new Book(author,title,genre);
+    }
+    void userAddBook()
+    {
+        Book * temp = getBookInfo();
+        addBook(temp->author, temp->title, temp->genre);
+        cout << "Book added!" << endl;
+    }
+    void userSearchForBook()
+    {
+        Book * temp = getBookInfo();
+        BookInventory * temp2 = searchForBook(temp);
+        if(temp2!=NULL)
+            temp2->printInfo();
+        else
+            cout << "There is no such book" << endl;
+    }
+    void userDeleteBook()
+    {
+        Book * temp = getBookInfo();
+        deleteBook(temp);
     }
 };
 
