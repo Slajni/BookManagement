@@ -11,6 +11,19 @@ struct Book
     string author;
     string title;
     string genre;
+
+    Book(string Author, string Title, string Genre)
+    {
+        author = Author;
+        title = Title;
+        genre = Genre;
+    }
+
+    Book()
+    {
+
+    }
+
 };
 
 struct BookInventory
@@ -18,6 +31,17 @@ struct BookInventory
     Book * book;
     int numberOfBooks = 0;
     int ID;
+
+    BookInventory(Book * bok, int number, int id)
+    {
+        book = bok;
+        numberOfBooks = number;
+        ID = id;
+    }
+    BookInventory()
+    {
+
+    }
 };
 
 class Library
@@ -53,17 +77,46 @@ public:
             printf("Book: %s written by %s of genre %s has %d copies and has %d id number\n", value->book->title.c_str(),
                    value->book->author.c_str(), value->book->genre.c_str(), value->numberOfBooks, value->ID);
     }
-
+    void saveToFile()
+    {
+        ofstream outputFile;
+        outputFile.open("books.txt");
+        for (auto const &value: books)
+        {
+            outputFile << value->book->title << " " << value->book->author << " "<< value->book->genre << " " << value->ID << " "<< value->numberOfBooks << endl;
+        }
+        outputFile.close();
+    }
+    void readFromFile()
+    {
+        ifstream saveFile;
+        saveFile.open("books.txt");
+        if(saveFile)
+        {
+            string author;
+            string title;
+            string genre;
+            int id;
+            int quantity;
+            while (saveFile >> title >> author >> genre >> id >> quantity)
+            {
+                books.push_back(new BookInventory(new Book(author, title, genre), quantity, id));
+            }
+        }
+        else
+            return;
+    }
 };
 
 int Library::nextId = 0;
 
 int main()
 {
-    Library testLib;
-    testLib.addBook("Damian", "Super", "Fantasy");
-    testLib.listBooks();
 
+    Library testLib;
+    testLib.readFromFile();
+    testLib.listBooks();
+    testLib.saveToFile();
 
     return 0;
 }
